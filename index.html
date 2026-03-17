@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <title>DTC e-Service | คณะวารสารศาสตร์และสื่อสารมวลชน</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="https://quota.jc.tu.ac.th/images/jc_logo.png" type="image/png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root {
+            /* ธีมสีหลัก (ม่วงคณะวารสารฯ) */
+            --primary: #743d88; 
+            --primary-light: #9b59b6;
+            --primary-dark: #5a2d6b;
+            --bg-color: #f4f6f9;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Thai', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(at 0% 0%, hsla(283,50%,90%,1) 0, transparent 50%), 
+                              radial-gradient(at 100% 100%, hsla(283,50%,90%,1) 0, transparent 50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ของตกแต่งพื้นหลังแนว Modern Blob */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 8s ease-in-out infinite;
+        }
+        .blob-1 {
+            width: 350px; height: 350px;
+            background: #ce93d8;
+            top: -100px; right: -100px;
+        }
+        .blob-2 {
+            width: 300px; height: 300px;
+            background: #e1bee7;
+            bottom: -50px; left: -50px;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        /* กล่องเนื้อหาหลัก (Glassmorphism นิดๆ) */
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(116, 61, 136, 0.08), 
+                        0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-top: 6px solid var(--primary);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-img {
+            width: 110px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        h2 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* กล่องคำแนะนำ */
+        .alert-box {
+            background: linear-gradient(to right, rgba(243, 229, 245, 0.5), rgba(243, 229, 245, 0.8));
+            border-left: 4px solid var(--primary-light);
+            color: var(--text-main);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .alert-box i {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 2px;
+        }
+
+        /* ปุ่มเข้าสู่ระบบ */
+        .cta-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 16px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 20px rgba(116, 61, 136, 0.3);
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(116, 61, 136, 0.4);
+            color: white;
+        }
+
+        .cta-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(116, 61, 136, 0.2);
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .main-card { padding: 30px 20px; }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 0.9rem; }
+            .cta-button { font-size: 1.05rem; padding: 14px 20px; }
+            .blob-1 { width: 250px; height: 250px; top: -50px; right: -50px; }
+            .blob-2 { width: 200px; height: 200px; bottom: -20px; left: -20px; }
+        }
+
+        /* สำหรับมือถือแนวนอน */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            body { align-items: flex-start; padding: 20px 0; }
+            .main-card { padding: 20px; margin-top: 10px; margin-bottom: 10px; }
+            .logo-img { width: 70px; margin-bottom: 10px; }
+            h1 { font-size: 1.3rem; margin-bottom: 5px; }
+            h2 { font-size: 0.85rem; margin-bottom: 15px; }
+            .alert-box { padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; }
+            .cta-button { padding: 12px 20px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="main-card">
+        <img src="https://quota.jc.tu.ac.th/images/jc_logo.png" alt="JC Logo" class="logo-img">
+        
+        <h1>ระบบ DTC e-Service</h1>
+        <h2>คณะวารสารศาสตร์และสื่อสารมวลชน<br>มหาวิทยาลัยธรรมศาสตร์</h2>
+
+        <div class="alert-box">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <strong>ข้อแนะนำ:</strong> กรุณาเข้าสู่หน้าต่างถัดไปเพื่อเริ่มทำรายการ<br>
+                <span style="font-size: 0.8em; color: var(--text-muted);">(เพื่อความสะดวก สามารถกดยอมรับสิทธิ์ และซ่อนแถบคำเตือนของ Google ด้านบนได้)</span>
+            </div>
+        </div>
+
+        <a id="login-btn" href="#" class="cta-button">
+            <span>เข้าสู่ระบบ (Login)</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+
+        <div class="footer-text">
+            © Digital Technology Center (DTC)
+        </div>
+    </div>
+
+    <script>
+        // 1. ตรวจสอบว่าเป็นระบบ iOS หรือไม่
+        function isIOS() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        // 2. ตรวจสอบว่าเป็น In-App Browser (Facebook/LINE) หรือไม่
+        function isInAppBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return /FBAN|FBAV|Line/i.test(ua);
+        }
+
+        function setButtonLink() {
+            const btn = document.getElementById('login-btn');
+            
+            // ⚠️ สำคัญมาก: เปลี่ยนลิงก์ด้านล่างนี้ให้เป็นลิงก์ Google Apps Script ของ "DTC e-Service" ⚠️
+            const targetUrl = 'https://script.google.com/a/macros/jc.tu.ac.th/s/AKfycbzqjvsm6m6hFooeUa20mEPsthVbNz_u2i1JO9bB_b65knHrRDg927DmSjdjSa2v9xRaOA/exec'; 
+            
+            // หากเปิดจาก Line/Facebook บน iPhone ให้ใช้ทริคบังคับเปิดใน Safari
+            if (isIOS() && isInAppBrowser()) {
+                btn.href = 'x-safari-' + targetUrl;
+            } else {
+                btn.href = targetUrl;
+            }
+        }
+
+        // เมื่อกดปุ่มเข้าสู่ระบบ
+        document.getElementById('login-btn').addEventListener('click', function(e) {
+            e.preventDefault(); 
+            
+            const targetUrl = this.href; 
+
+            // แสดง Loading อนิเมชัน
+            Swal.fire({
+                title: 'กำลังพาท่านเข้าสู่ระบบ',
+                html: 'กรุณารอสักครู่...',
+                allowOutsideClick: false, 
+                allowEscapeKey: false,
+                color: '#743d88',
+                didOpen: () => {
+                    Swal.showLoading(); 
+                }
+            });
+
+            // หน่วงเวลาเล็กน้อยให้เห็น Loading แล้วค่อย Redirect
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 600);
+        });
+
+        // ซ่อน Loading เวลากดปุ่ม Back กลับมาหน้านี้
+        window.addEventListener('pageshow', function(event) {
+            Swal.close(); 
+        });
+
+        // เรียกใช้งานฟังก์ชันเซ็ตลิงก์เมื่อโหลดหน้าเว็บ
+        setButtonLink();
+    </script>
+</body>
+</html>

@@ -233,13 +233,16 @@
             return /FBAN|FBAV|Line/i.test(ua);
         }
 
-        function setButtonLink() {
+       function setButtonLink() {
             const btn = document.getElementById('login-btn');
             
-            // ⚠️ สำคัญมาก: เปลี่ยนลิงก์ด้านล่างนี้ให้เป็นลิงก์ Google Apps Script ของ "DTC e-Service" ⚠️
-            const targetUrl = 'https://script.google.com/a/macros/jc.tu.ac.th/s/AKfycbwIA1x8Wb6yrZ6uMeUACzpIE5yIMOBnE3XV_xdMxPS0w33470UtqIsdlQADdABID7T0Yw/exec'; 
+            // 1. ลิงก์ GAS เดิมของคุณ
+            const rawUrl = 'https://script.google.com/a/macros/jc.tu.ac.th/s/AKfycbwIA1x8Wb6yrZ6uMeUACzpIE5yIMOBnE3XV_xdMxPS0w33470UtqIsdlQADdABID7T0Yw/exec'; 
             
-            // หากเปิดจาก Line/Facebook บน iPhone ให้ใช้ทริคบังคับเปิดใน Safari
+            // 2. ใช้ AccountChooser ครอบ และใช้ encodeURIComponent เพื่อป้องกัน URL เพี้ยน
+            const targetUrl = 'https://accounts.google.com/AccountChooser?continue=' + encodeURIComponent(rawUrl);
+            
+            // หากเปิดจาก Line/Facebook บน iPhone ให้ใช้ทริคบังคับเปิดใน Safari ตามเดิม
             if (isIOS() && isInAppBrowser()) {
                 btn.href = 'x-safari-' + targetUrl;
             } else {
